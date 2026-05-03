@@ -1,211 +1,153 @@
-/*import java.util.*;
+// Task 1 – DFS
+// Traversal order: A → C → B → E → G → F → D
 
-public class Ads {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+import java.util.*;
 
-        int n = sc.nextInt();
-        ArrayList<ArrayList<Integer>> list = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            int d = sc.nextInt();
-            ArrayList<Integer> row = new ArrayList<>();
+public class ADS {
+    private Map<String, List<String>> graph = new HashMap<>();
+    private Set<String> visited = new HashSet<>();
 
-            for (int j = 0; j < d; j++) {
-                row.add(sc.nextInt());
-            }
-
-            list.add(row);
-        }
-
-        int q = sc.nextInt();
-
-        for (int i = 0; i < q; i++) {
-            int x = sc.nextInt();
-            int y = sc.nextInt();
-
-            if (x - 1 < list.size() && y - 1 < list.get(x - 1).size()) {
-                System.out.println(list.get(x - 1).get(y - 1));
-            } else {
-                System.out.println("ERROR!");
-            }
-        }
-    }
-}8*/
-
-/*import java.util.*;
-
-public class Ads {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        int n = sc.nextInt();
-        ArrayList<ArrayList<Integer>> list = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            int d = sc.nextInt();
-            ArrayList<Integer> row = new ArrayList<>();
-
-            for (int j = 0; j < d; j++) {
-                row.add(sc.nextInt());
-            }
-
-            list.add(row);
-        }
-
-        int q = sc.nextInt();
-
-        for (int i = 0; i < q; i++) {
-            int x = sc.nextInt();
-            int y = sc.nextInt();
-
-            if (x - 1 < list.size() && y - 1 < list.get(x - 1).size()) {
-                System.out.println(list.get(x - 1).get(y - 1));
-            } else {
-                System.out.println("ERROR!");
-            }
-        }
-    }
-}*/
-
-/*import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Scanner;
-
-public class Ads {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        Deque<Integer> shelf = new LinkedList<>();
-        for (int i = 0; i < N; i++) {
-            int op = sc.nextInt();
-            if (op == 1) {
-                int disk = sc.nextInt();
-                shelf.addFirst(disk);
-            } else if (op == 2) {
-                int disk = sc.nextInt();
-                shelf.addLast(disk);
-            } else if (op == 3) {
-                System.out.println(shelf.removeFirst());
-            } else if (op == 4) {
-                System.out.println(shelf.removeLast());
-            }
-        }
-    }
-}*/
-
-/*import java.util.Stack;
-
-public class Ads {
-    public static void insertAtBottom(Stack<Integer> stack, int item) {
-        if (stack.isEmpty()) {
-            stack.push(item);
-            return;
-        }
-        int top = stack.pop();
-        insertAtBottom(stack, item);
-        stack.push(top);
+    public ADS() {
+        graph.put("A", Arrays.asList("C","B","D"));
+        graph.put("B", Arrays.asList("A","C","E","G"));
+        graph.put("C", Arrays.asList("A","B","D"));
+        graph.put("D", Arrays.asList("C","A"));
+        graph.put("E", Arrays.asList("G","F","B"));
+        graph.put("F", Arrays.asList("G","E"));
+        graph.put("G", Arrays.asList("F","B"));
     }
 
-    public static void reverse(Stack<Integer> stack) {
-        if (stack.isEmpty()) {
-            return;
-        }
-        int top = stack.pop();
-        reverse(stack);
-        insertAtBottom(stack, top);
-    }
-
-    public static void main(String[] args) {
-        Stack<Integer> stack = new Stack<>();
-        stack.push(9);
-        stack.push(1);
-        stack.push(3);
-        stack.push(5);
-        stack.push(7);
-
-        reverse(stack);
-
-        while (!stack.isEmpty()) {
-            System.out.print(stack.pop() + " ");
-        }
-    }
-}*/
-
-/*import java.util.LinkedList;
-import java.util.Queue;
-
-public class Ads {
-    public static int countUnableToEat(int[] students, int[] samsas) {
-        Queue<Integer> queue = new LinkedList<>();
-        for (int s : students) {
-            queue.add(s);
-        }
-        int index = 0;
-        int rotations = 0;
-        while (!queue.isEmpty() && rotations < queue.size()) {
-            if (queue.peek() == samsas[index]) {
-                queue.poll();
-                index++;
-                rotations = 0;
-            } else {
-                queue.add(queue.poll());
-                rotations++;
-            }
-        }
-        return queue.size();
-    }
-
-    public static void main(String[] args) {
-        int[] students1 = {1,1,0,0};
-        int[] samsas1 = {0,1,0,1};
-        System.out.println(countUnableToEat(students1, samsas1));
-
-        int[] students2 = {1,1,1,0,0,1};
-        int[] samsas2 = {1,0,0,0,1,1};
-        System.out.println(countUnableToEat(students2, samsas2));
-    }
-}*/
-
-/*import java.util.Scanner;
-
-public class Ads {
-    public static void heapify(int[] arr, int n, int i) {
-        int largest = i;
-        int left = 2 * i + 1;
-        int right = 2 * i + 2;
-
-        if (left < n && arr[left] > arr[largest]) {
-            largest = left;
-        }
-        if (right < n && arr[right] > arr[largest]) {
-            largest = right;
-        }
-        if (largest != i) {
-            int temp = arr[i];
-            arr[i] = arr[largest];
-            arr[largest] = temp;
-            heapify(arr, n, largest);
-        }
-    }
-
-    public static void buildHeap(int[] arr, int n) {
-        for (int i = n / 2 - 1; i >= 0; i--) {
-            heapify(arr, n, i);
+    public void dfs(String node) {
+        if (visited.contains(node)) return;
+        visited.add(node);
+        System.out.print(node + " ");
+        for (String neighbor : graph.get(node)) {
+            dfs(neighbor);
         }
     }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int[] arr = new int[n];
-        for (int i = 0; i < n; i++) {
-            arr[i] = sc.nextInt();
-        }
-        buildHeap(arr, n);
-        for (int i = 0; i < n; i++) {
-            System.out.print(arr[i] + " ");
+        ADS d = new ADS();
+        d.dfs("A");
+    }
+}
+
+
+
+
+// Task 2 – BFS
+// Traversal order: A → C → B → D → E → G → F
+
+import java.util.*;
+
+public class ADS {
+    private Map<String, List<String>> graph = new HashMap<>();
+
+    public ADS() {
+        graph.put("A", Arrays.asList("C","B","D"));
+        graph.put("B", Arrays.asList("A","C","E","G"));
+        graph.put("C", Arrays.asList("A","B","D"));
+        graph.put("D", Arrays.asList("C","A"));
+        graph.put("E", Arrays.asList("G","F","B"));
+        graph.put("F", Arrays.asList("G","E"));
+        graph.put("G", Arrays.asList("F","B"));
+    }
+
+    public void bfs(String start) {
+        Set<String> visited = new HashSet<>();
+        Queue<String> queue = new LinkedList<>();
+        queue.add(start);
+        visited.add(start);
+
+        while (!queue.isEmpty()) {
+            String node = queue.poll();
+            System.out.print(node + " ");
+            for (String neighbor : graph.get(node)) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    queue.add(neighbor);
+                }
+            }
         }
     }
-}*/
+
+    public static void main(String[] args) {
+        ADS b = new ADS();
+        b.bfs("A");
+    }
+}
 
 
+
+
+
+
+// Task 3 – Comparison
+// DFS program output matches Task 1 order.
+// BFS program output matches Task 2 order.
+
+
+
+
+
+// Task 4 – Shortest Path (Edinburgh → Dundee)
+// Using Dijkstra’s algorithm, the shortest path is Edinburgh → Perth → Dundee
+
+
+
+
+
+// Task 5 – Dijkstra Implementation
+
+import java.util.*;
+
+public class ADS {
+    private Map<String, Map<String, Integer>> graph = new HashMap<>();
+
+    public ADS() {
+        graph.put("Edinburgh", Map.of("Perth", 45, "Glasgow", 50));
+        graph.put("Perth", Map.of("Edinburgh", 45, "Dundee", 25));
+        graph.put("Glasgow", Map.of("Edinburgh", 50, "Dundee", 70));
+        graph.put("Dundee", Map.of("Perth", 25, "Glasgow", 70));
+    }
+
+    public void dijkstra(String start, String target) {
+        Map<String, Integer> dist = new HashMap<>();
+        Map<String, String> prev = new HashMap<>();
+        PriorityQueue<String> pq = new PriorityQueue<>(Comparator.comparingInt(dist::get));
+
+        for (String v : graph.keySet()) {
+            dist.put(v, Integer.MAX_VALUE);
+            prev.put(v, null);
+        }
+        dist.put(start, 0);
+        pq.add(start);
+
+        while (!pq.isEmpty()) {
+            String u = pq.poll();
+            for (Map.Entry<String, Integer> e : graph.get(u).entrySet()) {
+                String v = e.getKey();
+                int alt = dist.get(u) + e.getValue();
+                if (alt < dist.get(v)) {
+                    dist.put(v, alt);
+                    prev.put(v, u);
+                    pq.add(v);
+                }
+            }
+        }
+
+        List<String> path = new ArrayList<>();
+        for (String at = target; at != null; at = prev.get(at)) {
+            path.add(at);
+        }
+        Collections.reverse(path);
+        System.out.println("Shortest path: " + path);
+        System.out.println("Distance: " + dist.get(target));
+    }
+
+    public static void main(String[] args) {
+        ADS d = new ADS();
+        d.dijkstra("Edinburgh", "Dundee");
+    }
+}
 
