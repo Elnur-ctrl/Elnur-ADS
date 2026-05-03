@@ -1,211 +1,105 @@
-/*import java.util.*;
-
-public class Ads {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        int n = sc.nextInt();
-        ArrayList<ArrayList<Integer>> list = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            int d = sc.nextInt();
-            ArrayList<Integer> row = new ArrayList<>();
-
-            for (int j = 0; j < d; j++) {
-                row.add(sc.nextInt());
-            }
-
-            list.add(row);
-        }
-
-        int q = sc.nextInt();
-
-        for (int i = 0; i < q; i++) {
-            int x = sc.nextInt();
-            int y = sc.nextInt();
-
-            if (x - 1 < list.size() && y - 1 < list.get(x - 1).size()) {
-                System.out.println(list.get(x - 1).get(y - 1));
-            } else {
-                System.out.println("ERROR!");
-            }
-        }
-    }
-}8*/
-
-/*import java.util.*;
-
-public class Ads {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        int n = sc.nextInt();
-        ArrayList<ArrayList<Integer>> list = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            int d = sc.nextInt();
-            ArrayList<Integer> row = new ArrayList<>();
-
-            for (int j = 0; j < d; j++) {
-                row.add(sc.nextInt());
-            }
-
-            list.add(row);
-        }
-
-        int q = sc.nextInt();
-
-        for (int i = 0; i < q; i++) {
-            int x = sc.nextInt();
-            int y = sc.nextInt();
-
-            if (x - 1 < list.size() && y - 1 < list.get(x - 1).size()) {
-                System.out.println(list.get(x - 1).get(y - 1));
-            } else {
-                System.out.println("ERROR!");
-            }
-        }
-    }
-}*/
-
-/*import java.util.Deque;
-import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Ads {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        Deque<Integer> shelf = new LinkedList<>();
-        for (int i = 0; i < N; i++) {
-            int op = sc.nextInt();
-            if (op == 1) {
-                int disk = sc.nextInt();
-                shelf.addFirst(disk);
-            } else if (op == 2) {
-                int disk = sc.nextInt();
-                shelf.addLast(disk);
-            } else if (op == 3) {
-                System.out.println(shelf.removeFirst());
-            } else if (op == 4) {
-                System.out.println(shelf.removeLast());
+
+    public static void bubbleSortAscending(String[] arr) {
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 0; j < arr.length - i - 1; j++) {
+                if (arr[j].compareTo(arr[j + 1]) > 0) {
+                    String temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
             }
         }
     }
-}*/
 
-/*import java.util.Stack;
-
-public class Ads {
-    public static void insertAtBottom(Stack<Integer> stack, int item) {
-        if (stack.isEmpty()) {
-            stack.push(item);
-            return;
-        }
-        int top = stack.pop();
-        insertAtBottom(stack, item);
-        stack.push(top);
-    }
-
-    public static void reverse(Stack<Integer> stack) {
-        if (stack.isEmpty()) {
-            return;
-        }
-        int top = stack.pop();
-        reverse(stack);
-        insertAtBottom(stack, top);
-    }
-
-    public static void main(String[] args) {
-        Stack<Integer> stack = new Stack<>();
-        stack.push(9);
-        stack.push(1);
-        stack.push(3);
-        stack.push(5);
-        stack.push(7);
-
-        reverse(stack);
-
-        while (!stack.isEmpty()) {
-            System.out.print(stack.pop() + " ");
+    public static void bubbleSortAscendingInt(int[] arr) {
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 0; j < arr.length - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
         }
     }
-}*/
 
-/*import java.util.LinkedList;
-import java.util.Queue;
-
-public class Ads {
-    public static int countUnableToEat(int[] students, int[] samsas) {
-        Queue<Integer> queue = new LinkedList<>();
-        for (int s : students) {
-            queue.add(s);
+    public static boolean checkAnagram(String first, String second) {
+        if (first.length() != second.length()) return false;
+        String[] arr1 = first.split("");
+        String[] arr2 = second.split("");
+        bubbleSortAscending(arr1);
+        bubbleSortAscending(arr2);
+        for (int i = 0; i < arr1.length; i++) {
+            if (!arr1[i].equals(arr2[i])) return false;
         }
-        int index = 0;
-        int rotations = 0;
-        while (!queue.isEmpty() && rotations < queue.size()) {
-            if (queue.peek() == samsas[index]) {
-                queue.poll();
-                index++;
-                rotations = 0;
+        return true;
+    }
+
+    public static int findKthSmallest(int[] arr, int k) {
+        bubbleSortAscendingInt(arr);
+        return arr[k - 1];
+    }
+
+    public static int findMedian(int[] arr) {
+        bubbleSortAscendingInt(arr);
+        int mid = arr.length / 2;
+        if (arr.length % 2 == 0) {
+            return (arr[mid - 1] + arr[mid]) / 2;
+        } else {
+            return arr[mid];
+        }
+    }
+
+    public static int minimumCapacity(int[] weights, int days) {
+        int left = 0, right = 0;
+        for (int w : weights) {
+            left = Math.max(left, w);
+            right += w;
+        }
+        while (left < right) {
+            int mid = (left + right) / 2;
+            int neededDays = 1, current = 0;
+            for (int w : weights) {
+                if (current + w > mid) {
+                    neededDays++;
+                    current = 0;
+                }
+                current += w;
+            }
+            if (neededDays > days) {
+                left = mid + 1;
             } else {
-                queue.add(queue.poll());
-                rotations++;
+                right = mid;
             }
         }
-        return queue.size();
+        return left;
     }
 
     public static void main(String[] args) {
-        int[] students1 = {1,1,0,0};
-        int[] samsas1 = {0,1,0,1};
-        System.out.println(countUnableToEat(students1, samsas1));
+        Scanner scan = new Scanner(System.in);
 
-        int[] students2 = {1,1,1,0,0,1};
-        int[] samsas2 = {1,0,0,0,1,1};
-        System.out.println(countUnableToEat(students2, samsas2));
-    }
-}*/
+        String first = scan.nextLine();
+        String second = scan.nextLine();
+        System.out.println(checkAnagram(first, second) ? "YES" : "NO");
 
-/*import java.util.Scanner;
-
-public class Ads {
-    public static void heapify(int[] arr, int n, int i) {
-        int largest = i;
-        int left = 2 * i + 1;
-        int right = 2 * i + 2;
-
-        if (left < n && arr[left] > arr[largest]) {
-            largest = left;
-        }
-        if (right < n && arr[right] > arr[largest]) {
-            largest = right;
-        }
-        if (largest != i) {
-            int temp = arr[i];
-            arr[i] = arr[largest];
-            arr[largest] = temp;
-            heapify(arr, n, largest);
-        }
-    }
-
-    public static void buildHeap(int[] arr, int n) {
-        for (int i = n / 2 - 1; i >= 0; i--) {
-            heapify(arr, n, i);
-        }
-    }
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
+        int n = scan.nextInt();
         int[] arr = new int[n];
-        for (int i = 0; i < n; i++) {
-            arr[i] = sc.nextInt();
-        }
-        buildHeap(arr, n);
-        for (int i = 0; i < n; i++) {
-            System.out.print(arr[i] + " ");
-        }
+        for (int i = 0; i < n; i++) arr[i] = scan.nextInt();
+        int k = scan.nextInt();
+        System.out.println(findKthSmallest(arr, k));
+
+        int m = scan.nextInt();
+        int[] arrMedian = new int[m];
+        for (int i = 0; i < m; i++) arrMedian[i] = scan.nextInt();
+        System.out.println(findMedian(arrMedian));
+
+        int size = scan.nextInt();
+        int[] weights = new int[size];
+        for (int i = 0; i < size; i++) weights[i] = scan.nextInt();
+        int days = scan.nextInt();
+        System.out.println(minimumCapacity(weights, days));
     }
-}*/
-
-
-
+}
