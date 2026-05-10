@@ -3,11 +3,11 @@
 
 import java.util.*;
 
-public class ADS {
+public class Ads {
     private Map<String, List<String>> graph = new HashMap<>();
     private Set<String> visited = new HashSet<>();
 
-    public ADS() {
+    public Ads() {
         graph.put("A", Arrays.asList("C","B","D"));
         graph.put("B", Arrays.asList("A","C","E","G"));
         graph.put("C", Arrays.asList("A","B","D"));
@@ -27,7 +27,7 @@ public class ADS {
     }
 
     public static void main(String[] args) {
-        ADS d = new ADS();
+        Ads d = new Ads();
         d.dfs("A");
     }
 }
@@ -40,10 +40,10 @@ public class ADS {
 
 import java.util.*;
 
-public class ADS {
+public class Ads {
     private Map<String, List<String>> graph = new HashMap<>();
 
-    public ADS() {
+    public Ads() {
         graph.put("A", Arrays.asList("C","B","D"));
         graph.put("B", Arrays.asList("A","C","E","G"));
         graph.put("C", Arrays.asList("A","B","D"));
@@ -72,12 +72,10 @@ public class ADS {
     }
 
     public static void main(String[] args) {
-        ADS b = new ADS();
+        Ads b = new Ads();
         b.bfs("A");
     }
 }
-
-
 
 
 
@@ -89,10 +87,8 @@ public class ADS {
 
 
 
-
 // Task 4 – Shortest Path (Edinburgh → Dundee)
 // Using Dijkstra’s algorithm, the shortest path is Edinburgh → Perth → Dundee
-
 
 
 
@@ -101,10 +97,10 @@ public class ADS {
 
 import java.util.*;
 
-public class ADS {
+public class Ads {
     private Map<String, Map<String, Integer>> graph = new HashMap<>();
 
-    public ADS() {
+    public Ads() {
         graph.put("Edinburgh", Map.of("Perth", 45, "Glasgow", 50));
         graph.put("Perth", Map.of("Edinburgh", 45, "Dundee", 25));
         graph.put("Glasgow", Map.of("Edinburgh", 50, "Dundee", 70));
@@ -146,7 +142,7 @@ public class ADS {
     }
 
     public static void main(String[] args) {
-        ADS d = new ADS();
+        Ads d = new Ads();
         d.dijkstra("Edinburgh", "Dundee");
     }
 }
