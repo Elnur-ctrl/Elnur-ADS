@@ -1,7 +1,7 @@
 // Task 1 – DFS
 // Traversal order: A → C → B → E → G → F → D
 
-import java.util.*;
+/*import java.util.*;
 
 public class Ads {
     private Map<String, List<String>> graph = new HashMap<>();
@@ -30,7 +30,7 @@ public class Ads {
         Ads d = new Ads();
         d.dfs("A");
     }
-}
+}*/
 
 
 
@@ -38,7 +38,7 @@ public class Ads {
 // Task 2 – BFS
 // Traversal order: A → C → B → D → E → G → F
 
-import java.util.*;
+/*import java.util.*;
 
 public class Ads {
     private Map<String, List<String>> graph = new HashMap<>();
@@ -75,7 +75,7 @@ public class Ads {
         Ads b = new Ads();
         b.bfs("A");
     }
-}
+}*/
 
 
 
@@ -95,7 +95,7 @@ public class Ads {
 
 // Task 5 – Dijkstra Implementation
 
-import java.util.*;
+/*import java.util.*;
 
 public class Ads {
     private Map<String, Map<String, Integer>> graph = new HashMap<>();
@@ -145,4 +145,4 @@ public class Ads {
         Ads d = new Ads();
         d.dijkstra("Edinburgh", "Dundee");
     }
-}
+}*/
