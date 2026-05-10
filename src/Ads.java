@@ -1,7 +1,11 @@
 // Task 1 – DFS
 // Traversal order: A → C → B → E → G → F → D
+// Task 2 – BFS
+// Traversal order: A → C → B → D → E → G → F
+// Task 4 – Shortest Path (Edinburgh → Dundee)
+// Shortest path: Edinburgh → Perth → Dundee
 
-/*import java.util.*;
+import java.util.*;
 
 public class Ads {
     private Map<String, List<String>> graph = new HashMap<>();
@@ -17,6 +21,7 @@ public class Ads {
         graph.put("G", Arrays.asList("F","B"));
     }
 
+    // DFS
     public void dfs(String node) {
         if (visited.contains(node)) return;
         visited.add(node);
@@ -26,93 +31,38 @@ public class Ads {
         }
     }
 
-    public static void main(String[] args) {
-        Ads d = new Ads();
-        d.dfs("A");
-    }
-}*/
-
-
-
-
-// Task 2 – BFS
-// Traversal order: A → C → B → D → E → G → F
-
-/*import java.util.*;
-
-public class Ads {
-    private Map<String, List<String>> graph = new HashMap<>();
-
-    public Ads() {
-        graph.put("A", Arrays.asList("C","B","D"));
-        graph.put("B", Arrays.asList("A","C","E","G"));
-        graph.put("C", Arrays.asList("A","B","D"));
-        graph.put("D", Arrays.asList("C","A"));
-        graph.put("E", Arrays.asList("G","F","B"));
-        graph.put("F", Arrays.asList("G","E"));
-        graph.put("G", Arrays.asList("F","B"));
-    }
-
+    // BFS
     public void bfs(String start) {
-        Set<String> visited = new HashSet<>();
+        Set<String> visitedBfs = new HashSet<>();
         Queue<String> queue = new LinkedList<>();
         queue.add(start);
-        visited.add(start);
+        visitedBfs.add(start);
 
         while (!queue.isEmpty()) {
             String node = queue.poll();
             System.out.print(node + " ");
             for (String neighbor : graph.get(node)) {
-                if (!visited.contains(neighbor)) {
-                    visited.add(neighbor);
+                if (!visitedBfs.contains(neighbor)) {
+                    visitedBfs.add(neighbor);
                     queue.add(neighbor);
                 }
             }
         }
     }
 
-    public static void main(String[] args) {
-        Ads b = new Ads();
-        b.bfs("A");
-    }
-}*/
-
-
-
-
-// Task 3 – Comparison
-// DFS program output matches Task 1 order.
-// BFS program output matches Task 2 order.
-
-
-
-
-// Task 4 – Shortest Path (Edinburgh → Dundee)
-// Using Dijkstra’s algorithm, the shortest path is Edinburgh → Perth → Dundee
-
-
-
-
-// Task 5 – Dijkstra Implementation
-
-/*import java.util.*;
-
-public class Ads {
-    private Map<String, Map<String, Integer>> graph = new HashMap<>();
-
-    public Ads() {
-        graph.put("Edinburgh", Map.of("Perth", 45, "Glasgow", 50));
-        graph.put("Perth", Map.of("Edinburgh", 45, "Dundee", 25));
-        graph.put("Glasgow", Map.of("Edinburgh", 50, "Dundee", 70));
-        graph.put("Dundee", Map.of("Perth", 25, "Glasgow", 70));
-    }
-
+    // Dijkstra
     public void dijkstra(String start, String target) {
+        Map<String, Map<String, Integer>> weightedGraph = new HashMap<>();
+        weightedGraph.put("Edinburgh", Map.of("Perth", 45, "Glasgow", 50));
+        weightedGraph.put("Perth", Map.of("Edinburgh", 45, "Dundee", 25));
+        weightedGraph.put("Glasgow", Map.of("Edinburgh", 50, "Dundee", 70));
+        weightedGraph.put("Dundee", Map.of("Perth", 25, "Glasgow", 70));
+
         Map<String, Integer> dist = new HashMap<>();
         Map<String, String> prev = new HashMap<>();
         PriorityQueue<String> pq = new PriorityQueue<>(Comparator.comparingInt(dist::get));
 
-        for (String v : graph.keySet()) {
+        for (String v : weightedGraph.keySet()) {
             dist.put(v, Integer.MAX_VALUE);
             prev.put(v, null);
         }
@@ -121,7 +71,7 @@ public class Ads {
 
         while (!pq.isEmpty()) {
             String u = pq.poll();
-            for (Map.Entry<String, Integer> e : graph.get(u).entrySet()) {
+            for (Map.Entry<String, Integer> e : weightedGraph.get(u).entrySet()) {
                 String v = e.getKey();
                 int alt = dist.get(u) + e.getValue();
                 if (alt < dist.get(v)) {
@@ -137,12 +87,20 @@ public class Ads {
             path.add(at);
         }
         Collections.reverse(path);
-        System.out.println("Shortest path: " + path);
+        System.out.println("\nShortest path: " + path);
         System.out.println("Distance: " + dist.get(target));
     }
 
     public static void main(String[] args) {
-        Ads d = new Ads();
-        d.dijkstra("Edinburgh", "Dundee");
+        Ads ads = new Ads();
+
+        System.out.println("DFS:");
+        ads.dfs("A");
+
+        System.out.println("\n\nBFS:");
+        ads.bfs("A");
+
+        System.out.println("\n\nDijkstra:");
+        ads.dijkstra("Edinburgh", "Dundee");
     }
-}*/
+}
