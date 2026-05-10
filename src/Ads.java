@@ -1,106 +1,106 @@
-import java.util.Scanner;
+// Task 1 – DFS
+// Traversal order: A → C → B → E → G → F → D
+// Task 2 – BFS
+// Traversal order: A → C → B → D → E → G → F
+// Task 4 – Shortest Path (Edinburgh → Dundee)
+// Shortest path: Edinburgh → Perth → Dundee
+
+import java.util.*;
 
 public class Ads {
+    private Map<String, List<String>> graph = new HashMap<>();
+    private Set<String> visited = new HashSet<>();
 
-    public static void bubbleSortAscending(String[] arr) {
-        for (int i = 0; i < arr.length - 1; i++) {
-            for (int j = 0; j < arr.length - i - 1; j++) {
-                if (arr[j].compareTo(arr[j + 1]) > 0) {
-                    String temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
+    public Ads() {
+        graph.put("A", Arrays.asList("C","B","D"));
+        graph.put("B", Arrays.asList("A","C","E","G"));
+        graph.put("C", Arrays.asList("A","B","D"));
+        graph.put("D", Arrays.asList("C","A"));
+        graph.put("E", Arrays.asList("G","F","B"));
+        graph.put("F", Arrays.asList("G","E"));
+        graph.put("G", Arrays.asList("F","B"));
+    }
+
+    // DFS
+    public void dfs(String node) {
+        if (visited.contains(node)) return;
+        visited.add(node);
+        System.out.print(node + " ");
+        for (String neighbor : graph.get(node)) {
+            dfs(neighbor);
+        }
+    }
+
+    // BFS
+    public void bfs(String start) {
+        Set<String> visitedBfs = new HashSet<>();
+        Queue<String> queue = new LinkedList<>();
+        queue.add(start);
+        visitedBfs.add(start);
+
+        while (!queue.isEmpty()) {
+            String node = queue.poll();
+            System.out.print(node + " ");
+            for (String neighbor : graph.get(node)) {
+                if (!visitedBfs.contains(neighbor)) {
+                    visitedBfs.add(neighbor);
+                    queue.add(neighbor);
                 }
             }
         }
     }
 
-    public static void bubbleSortAscendingInt(int[] arr) {
-        for (int i = 0; i < arr.length - 1; i++) {
-            for (int j = 0; j < arr.length - i - 1; j++) {
-                if (arr[j] > arr[j + 1]) {
-                    int temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
+    // Dijkstra
+    public void dijkstra(String start, String target) {
+        Map<String, Map<String, Integer>> weightedGraph = new HashMap<>();
+        weightedGraph.put("Edinburgh", Map.of("Perth", 45, "Glasgow", 50));
+        weightedGraph.put("Perth", Map.of("Edinburgh", 45, "Dundee", 25));
+        weightedGraph.put("Glasgow", Map.of("Edinburgh", 50, "Dundee", 70));
+        weightedGraph.put("Dundee", Map.of("Perth", 25, "Glasgow", 70));
+
+        Map<String, Integer> dist = new HashMap<>();
+        Map<String, String> prev = new HashMap<>();
+        PriorityQueue<String> pq = new PriorityQueue<>(Comparator.comparingInt(dist::get));
+
+        for (String v : weightedGraph.keySet()) {
+            dist.put(v, Integer.MAX_VALUE);
+            prev.put(v, null);
+        }
+        dist.put(start, 0);
+        pq.add(start);
+
+        while (!pq.isEmpty()) {
+            String u = pq.poll();
+            for (Map.Entry<String, Integer> e : weightedGraph.get(u).entrySet()) {
+                String v = e.getKey();
+                int alt = dist.get(u) + e.getValue();
+                if (alt < dist.get(v)) {
+                    dist.put(v, alt);
+                    prev.put(v, u);
+                    pq.add(v);
                 }
             }
         }
-    }
 
-    public static boolean checkAnagram(String first, String second) {
-        if (first.length() != second.length()) return false;
-        String[] arr1 = first.split("");
-        String[] arr2 = second.split("");
-        bubbleSortAscending(arr1);
-        bubbleSortAscending(arr2);
-        for (int i = 0; i < arr1.length; i++) {
-            if (!arr1[i].equals(arr2[i])) return false;
+        List<String> path = new ArrayList<>();
+        for (String at = target; at != null; at = prev.get(at)) {
+            path.add(at);
         }
-        return true;
-    }
-
-    public static int findKthSmallest(int[] arr, int k) {
-        bubbleSortAscendingInt(arr);
-        return arr[k - 1];
-    }
-
-    public static int findMedian(int[] arr) {
-        bubbleSortAscendingInt(arr);
-        int mid = arr.length / 2;
-        if (arr.length % 2 == 0) {
-            return (arr[mid - 1] + arr[mid]) / 2;
-        } else {
-            return arr[mid];
-        }
-    }
-
-    public static int minimumCapacity(int[] weights, int days) {
-        int left = 0, right = 0;
-        for (int w : weights) {
-            left = Math.max(left, w);
-            right += w;
-        }
-        while (left < right) {
-            int mid = (left + right) / 2;
-            int neededDays = 1, current = 0;
-            for (int w : weights) {
-                if (current + w > mid) {
-                    neededDays++;
-                    current = 0;
-                }
-                current += w;
-            }
-            if (neededDays > days) {
-                left = mid + 1;
-            } else {
-                right = mid;
-            }
-        }
-        return left;
+        Collections.reverse(path);
+        System.out.println("\nShortest path: " + path);
+        System.out.println("Distance: " + dist.get(target));
     }
 
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
+        Ads ads = new Ads();
 
-        String first = scan.nextLine();
-        String second = scan.nextLine();
-        System.out.println(checkAnagram(first, second) ? "YES" : "NO");
+        System.out.println("DFS:");
+        ads.dfs("A");
 
-        int n = scan.nextInt();
-        int[] arr = new int[n];
-        for (int i = 0; i < n; i++) arr[i] = scan.nextInt();
-        int k = scan.nextInt();
-        System.out.println(findKthSmallest(arr, k));
+        System.out.println("\n\nBFS:");
+        ads.bfs("A");
 
-        int m = scan.nextInt();
-        int[] arrMedian = new int[m];
-        for (int i = 0; i < m; i++) arrMedian[i] = scan.nextInt();
-        System.out.println(findMedian(arrMedian));
-
-        int size = scan.nextInt();
-        int[] weights = new int[size];
-        for (int i = 0; i < size; i++) weights[i] = scan.nextInt();
-        int days = scan.nextInt();
-        System.out.println(minimumCapacity(weights, days));
+        System.out.println("\n\nDijkstra:");
+        ads.dijkstra("Edinburgh", "Dundee");
     }
 }
-
