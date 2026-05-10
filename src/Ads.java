@@ -103,4 +103,3 @@ public class Ads {
         System.out.println(minimumCapacity(weights, days));
     }
 }
-
